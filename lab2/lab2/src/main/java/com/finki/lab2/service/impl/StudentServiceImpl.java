@@ -28,7 +28,6 @@ public StudentServiceImpl(StudentRepository studentRepository,StudyProgramReposi
     @Override
 	public List<Student> findAllStudents() {
 		return studentRepository.findAll();
-		//return studentRepository.findAll().stream().filter(p -> p instanceof Student).collect(Collectors.toList());
 	}
 
 	@Override
@@ -42,35 +41,46 @@ public StudentServiceImpl(StudentRepository studentRepository,StudyProgramReposi
 	}
 
 	@Override
+	public Student addStudent(StudentDataDto studentDataDto) throws StudentPostException {
+		if(studentDataDto.index == null || studentDataDto.name == null || studentDataDto.lastName == null || studentDataDto.studyProgramName ==null)
+			throw new StudentPostException();
+		if(studentDataDto.index.length()!=6)
+			throw new StudentPostException();
+		if(!studyProgramRepository.existsByName(studentDataDto.studyProgramName))
+			throw new StudentPostException();
+		Student s = new Student();
+		s.setIndex(studentDataDto.index);
+		s.setName(studentDataDto.name);
+		s.setLastName(studentDataDto.lastName);
+		StudyProgram p = studyProgramRepository.findByName(studentDataDto.studyProgramName);
+		s.setStudyProgram(p);
+		return studentRepository.save(s);
+	}
+
+	@Override
+	public void updateStudent(String index,StudentDataDto studentDataDto) throws StudentPostException, StudentNotFoundException {
+		if(!studentRepository.existsById(index))
+			throw new StudentNotFoundException();
+		Student student = studentRepository.getOne(index);
+		if(studentDataDto.name != null && !studentDataDto.name.isEmpty())
+			student.setName(studentDataDto.name);
+		if(studentDataDto.lastName != null && !studentDataDto.lastName.isEmpty())
+			student.setLastName(studentDataDto.lastName);
+		if(studentDataDto.studyProgramName != null && !studentDataDto.studyProgramName.isEmpty()){
+			if(!studyProgramRepository.existsByName(studentDataDto.studyProgramName))
+				throw new StudentPostException();
+			student.setStudyProgram(studyProgramRepository.findByName(studentDataDto.studyProgramName));
+		}
+		studentRepository.save(student);
+	}	
+	
+	@Override
 	public void deleteStudent(String index) throws StudentNotFoundException {
 		if(studentRepository.existsById(index))
 			studentRepository.deleteById(index);
 		else
 			throw new StudentNotFoundException();
 	}
-
-	@Override
-	public Student addStudent(StudentDataDto studentDataDto) throws StudentPostException {
-		System.out.println(studentDataDto.index);
-		System.out.println(studentDataDto.name);
-		System.out.println(studentDataDto.lastName);
-		System.out.println(studentDataDto.studyProgramName);
-		if(studentDataDto.index == null || studentDataDto.name == null || studentDataDto.lastName == null || studentDataDto.studyProgramName ==null)
-			throw new StudentPostException();
-		if(studentDataDto.index.length()!=6)
-			throw new StudentPostException();
-		if(!studyProgramRepository.existsById(Long.parseLong(studentDataDto.studyProgramName)))
-			throw new StudentPostException();
-		Student s = new Student();
-		s.setIndex(studentDataDto.index);
-		s.setName(studentDataDto.name);
-		s.setLastName(studentDataDto.lastName);
-		StudyProgram p = studyProgramRepository.findById(Long.parseLong(studentDataDto.studyProgramName)).get();
-		s.setStudyProgram(p);
-		return studentRepository.save(s);
-	}
-	
-
    
 
 }

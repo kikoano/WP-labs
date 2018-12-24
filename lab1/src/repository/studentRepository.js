@@ -50,12 +50,3 @@ export const listStudents = () => {
         }
     ];
 };
-
-export const cloneStudents = (state,index,student) => {
-    const newStudentsArrayRef = [
-        ...state.students
-    ];
-
-    newStudentsArrayRef[index] = student;
-    return newStudentsArrayRef;
-}

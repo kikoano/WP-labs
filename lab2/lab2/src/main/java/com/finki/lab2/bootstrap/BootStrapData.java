@@ -23,15 +23,15 @@ public class BootStrapData implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         StudyProgram sp1 = new StudyProgram();
-        sp1.setName("Structurno programiranje");
+        sp1.setName("KNI");
         studyProgramRepository.save(sp1);
 
         sp1 = new StudyProgram();
-        sp1.setName("Napredno programiranje");
+        sp1.setName("PET");
         studyProgramRepository.save(sp1);
 
         sp1 = new StudyProgram();
-        sp1.setName("Web programiranje");
+        sp1.setName("IKI");
         studyProgramRepository.save(sp1);
 
         Student s1 = new Student();
