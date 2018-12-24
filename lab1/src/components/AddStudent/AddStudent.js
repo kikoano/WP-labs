@@ -35,7 +35,7 @@ class AddStudent extends Component {
     render() {
         return (
             <form className="w-100" onSubmit={this.addStudent}>
-                <h3>Add</h3>
+                <h3>Add Students</h3>
                 <div className="row">
                     <div className="col-md-3">
                         <div className="form-group">

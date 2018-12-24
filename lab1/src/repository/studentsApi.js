@@ -24,7 +24,7 @@ export const updateStudent = (student)=>{
         },
         body: JSON.stringify({
             name:student.name,
-            lastname:student.lastname,
+            lastName:student.lastName,
             studyProgramName:student.studyProgram.name
         })
     });
